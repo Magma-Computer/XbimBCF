@@ -73,7 +73,11 @@ namespace Xbim.BCF
                         currentGuid = entry.ExtractGuidFolderName();
                         currentTopic = new Topic();
                     }
-                    currentTopic.Visualization = new VisualizationXMLFile(XDocument.Load(entry.Open()));
+                    if (currentTopic.Visualizations == null)
+                    {
+                        currentTopic.Visualizations = new List<VisualizationXMLFile>();
+                    }
+                    currentTopic.Visualizations.Add(new VisualizationXMLFile(XDocument.Load(entry.Open())));
                 }
                 else if (entry.FullName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
                 {
@@ -153,15 +157,25 @@ namespace Xbim.BCF
                         }
                     }
 
-                    string bcfvName = t.Markup.Topic.Guid.ToString() + "/viewpoint.bcfv";
-                    var bcfv = archive.CreateEntry(bcfvName);
-                    using (var bcfvStream = bcfv.Open())
+                    int vXmlFileIndex = 0;
+                    foreach (VisualizationXMLFile vXmlFile in t.Visualizations)
                     {
-                        using (var bcfvWriter = new StreamWriter(bcfvStream))
+                        string visIndexText = string.Empty;
+                        if (vXmlFileIndex != 0)
                         {
-                            bcfvSerializer.Serialize(bcfvWriter, t.Visualization);
-                            bcfvWriter.Close();
+                            visIndexText = "_" + vXmlFileIndex;
                         }
+                        string bcfvName = t.Markup.Topic.Guid.ToString() + "/viewpoint" + visIndexText + ".bcfv";
+                        var bcfv = archive.CreateEntry(bcfvName);
+                        using (var bcfvStream = bcfv.Open())
+                        {
+                            using (var bcfvWriter = new StreamWriter(bcfvStream))
+                            {
+                                bcfvSerializer.Serialize(bcfvWriter, vXmlFile);
+                                bcfvWriter.Close();
+                            }
+                        }
+                        vXmlFileIndex++;
                     }
 
                     foreach (KeyValuePair<String, byte[]> img in t.Snapshots)

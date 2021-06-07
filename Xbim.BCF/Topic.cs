@@ -16,7 +16,7 @@ namespace Xbim.BCF
         /// <summary>
         /// .bcfv Files Projections
         /// </summary>
-        public List<VisualizationXMLFile> Visualizations { get; set; }
+        public List<KeyValuePair<String, VisualizationXMLFile>> Visualizations;
         /// <summary>
         /// Collection of key/value pairs representing the (Key)name and (Value)Base64 String representations of a .png file associated with the topic
         /// </summary>
@@ -24,6 +24,7 @@ namespace Xbim.BCF
 
         public Topic()
         {
+            Visualizations = new List<KeyValuePair<String, VisualizationXMLFile>>();
             Snapshots = new List<KeyValuePair<String, byte[]>>();
         }
     }

@@ -86,7 +86,7 @@ namespace Xbim.BCF.XMLNodes
         private BCFOrthogonalCamera()
         { }
 
-        public BCFOrthogonalCamera(Vector cameraViewPoint, Vector cameraDirection, Vector cameraUpVector, int viewToWorldScale)
+        public BCFOrthogonalCamera(Vector cameraViewPoint, Vector cameraDirection, Vector cameraUpVector, double viewToWorldScale)
         {
             CameraViewPoint = cameraViewPoint;
             CameraDirection = cameraDirection;

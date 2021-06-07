@@ -86,7 +86,7 @@ namespace Xbim.BCF.XMLNodes
         private BCFPerspectiveCamera()
         { }
 
-        public BCFPerspectiveCamera(Vector cameraViewPoint, Vector cameraDirection, Vector cameraUpVector, int fieldOfView)
+        public BCFPerspectiveCamera(Vector cameraViewPoint, Vector cameraDirection, Vector cameraUpVector, double fieldOfView)
         {
             CameraViewPoint = cameraViewPoint;
             CameraDirection = cameraDirection;

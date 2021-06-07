@@ -73,11 +73,7 @@ namespace Xbim.BCF
                         currentGuid = entry.ExtractGuidFolderName();
                         currentTopic = new Topic();
                     }
-                    if (currentTopic.Visualizations == null)
-                    {
-                        currentTopic.Visualizations = new List<VisualizationXMLFile>();
-                    }
-                    currentTopic.Visualizations.Add(new VisualizationXMLFile(XDocument.Load(entry.Open())));
+                    currentTopic.Visualizations.Add(new KeyValuePair<string, VisualizationXMLFile>(entry.Name.Substring(0, entry.Name.IndexOf(".")), new VisualizationXMLFile(XDocument.Load(entry.Open()))));
                 }
                 else if (entry.FullName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
                 {
@@ -93,7 +89,7 @@ namespace Xbim.BCF
                     using (MemoryStream ms = new MemoryStream())
                     {
                         entry.Open().CopyTo(ms);
-                        currentTopic.Snapshots.Add(new KeyValuePair<string, byte[]>(entry.FullName, ms.ToArray()));
+                        currentTopic.Snapshots.Add(new KeyValuePair<string, byte[]>(entry.Name.Substring(0, entry.Name.IndexOf(".")), ms.ToArray()));
                     }
                 }
             }
@@ -157,30 +153,40 @@ namespace Xbim.BCF
                         }
                     }
 
-                    int vXmlFileIndex = 0;
-                    foreach (VisualizationXMLFile vXmlFile in t.Visualizations)
+                    String emptyViewpointName = "viewpoint";
+
+                    // Creates an empty VisualizationXMLFile in accordance with the BCF format requirements
+                    string emptyBcfvName = String.Format("{0}/{1}.bcfv", t.Markup.Topic.Guid, emptyViewpointName);
+                    var emptyBcfv = archive.CreateEntry(emptyBcfvName);
+                    using (var bcfvStream = emptyBcfv.Open())
                     {
-                        string visIndexText = string.Empty;
-                        if (vXmlFileIndex != 0)
+                        using (var bcfvWriter = new StreamWriter(bcfvStream))
                         {
-                            visIndexText = "_" + vXmlFileIndex;
+                            bcfvSerializer.Serialize(bcfvWriter, new VisualizationXMLFile());
+                            bcfvWriter.Close();
                         }
-                        string bcfvName = t.Markup.Topic.Guid.ToString() + "/viewpoint" + visIndexText + ".bcfv";
-                        var bcfv = archive.CreateEntry(bcfvName);
-                        using (var bcfvStream = bcfv.Open())
+                    }
+
+                    foreach (KeyValuePair<string, VisualizationXMLFile> visualization in t.Visualizations)
+                    {
+                        if (visualization.Key != emptyViewpointName)
                         {
-                            using (var bcfvWriter = new StreamWriter(bcfvStream))
+                            string bcfvName = String.Format("{0}/{1}.bcfv", t.Markup.Topic.Guid, visualization.Key);
+                            var bcfv = archive.CreateEntry(bcfvName);
+                            using (var bcfvStream = bcfv.Open())
                             {
-                                bcfvSerializer.Serialize(bcfvWriter, vXmlFile);
-                                bcfvWriter.Close();
+                                using (var bcfvWriter = new StreamWriter(bcfvStream))
+                                {
+                                    bcfvSerializer.Serialize(bcfvWriter, visualization.Value);
+                                    bcfvWriter.Close();
+                                }
                             }
                         }
-                        vXmlFileIndex++;
                     }
 
                     foreach (KeyValuePair<String, byte[]> img in t.Snapshots)
                     {
-                        string snapshotName = string.Format("{0}/{1}", t.Markup.Topic.Guid, img.Key);
+                        string snapshotName = String.Format("{0}/{1}.png", t.Markup.Topic.Guid, img.Key);
                         var png = archive.CreateEntry(snapshotName);
                         using (var pngStream = png.Open())
                         {

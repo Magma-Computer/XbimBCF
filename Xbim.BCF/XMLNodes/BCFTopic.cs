@@ -38,9 +38,9 @@ namespace Xbim.BCF.XMLNodes
             get { return _title; }
             set
             {
-                if (String.IsNullOrEmpty(value))
+                if (value == null)
                 {
-                    throw new ArgumentException(this.GetType().Name + " - Title is mandatory");
+                    throw new ArgumentException(this.GetType().Name + " - Title shouldn't be null");
                 }
                 else
                 {

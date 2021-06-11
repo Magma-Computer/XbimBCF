@@ -47,9 +47,9 @@ namespace Xbim.BCF.XMLNodes
             get { return _status; }
             set
             {
-                if (String.IsNullOrEmpty(value))
+                if (value == null)
                 {
-                    throw new ArgumentException(this.GetType().Name + " - Status is mandatory");
+                    throw new ArgumentException(this.GetType().Name + " - Status shouldn't be null");
                 }
                 else
                 {
@@ -107,9 +107,9 @@ namespace Xbim.BCF.XMLNodes
             get { return _comment; }
             set
             {
-                if (String.IsNullOrEmpty(value))
+                if (value == null)
                 {
-                    throw new ArgumentException(this.GetType().Name + " - Comment text is mandatory");
+                    throw new ArgumentException(this.GetType().Name + " - Comment text shouldn't be null");
                 }
                 else
                 {

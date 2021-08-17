@@ -25,7 +25,7 @@ namespace Xbim.BCF.XMLNodes
                 }
                 else
                 {
-                    throw new ArgumentException(this.GetType().Name + " - Color - must be a valid hex sequence");
+                    _color = "000000";
                 }
             }
         }

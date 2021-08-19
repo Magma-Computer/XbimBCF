@@ -153,33 +153,16 @@ namespace Xbim.BCF
                         }
                     }
 
-                    String emptyViewpointName = "viewpoint";
-
-                    // Creates an empty VisualizationXMLFile in accordance with the BCF format requirements
-                    string emptyBcfvName = String.Format("{0}/{1}.bcfv", t.Markup.Topic.Guid, emptyViewpointName);
-                    var emptyBcfv = archive.CreateEntry(emptyBcfvName);
-                    using (var bcfvStream = emptyBcfv.Open())
-                    {
-                        using (var bcfvWriter = new StreamWriter(bcfvStream))
-                        {
-                            bcfvSerializer.Serialize(bcfvWriter, new VisualizationXMLFile());
-                            bcfvWriter.Close();
-                        }
-                    }
-
                     foreach (KeyValuePair<string, VisualizationXMLFile> visualization in t.Visualizations)
                     {
-                        if (visualization.Key != emptyViewpointName)
+                        string bcfvName = String.Format("{0}/{1}.bcfv", t.Markup.Topic.Guid, visualization.Key);
+                        var bcfv = archive.CreateEntry(bcfvName);
+                        using (var bcfvStream = bcfv.Open())
                         {
-                            string bcfvName = String.Format("{0}/{1}.bcfv", t.Markup.Topic.Guid, visualization.Key);
-                            var bcfv = archive.CreateEntry(bcfvName);
-                            using (var bcfvStream = bcfv.Open())
+                            using (var bcfvWriter = new StreamWriter(bcfvStream))
                             {
-                                using (var bcfvWriter = new StreamWriter(bcfvStream))
-                                {
-                                    bcfvSerializer.Serialize(bcfvWriter, visualization.Value);
-                                    bcfvWriter.Close();
-                                }
+                                bcfvSerializer.Serialize(bcfvWriter, visualization.Value);
+                                bcfvWriter.Close();
                             }
                         }
                     }

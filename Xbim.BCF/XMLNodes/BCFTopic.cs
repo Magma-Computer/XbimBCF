@@ -174,7 +174,15 @@ namespace Xbim.BCF.XMLNodes
         {
             return RelatedTopics != null && RelatedTopics.Count > 0;
         }
-
+        /// <summary>
+        /// Date until when the topics issue needs to be resolved
+        /// </summary>
+        [XmlElement(Order = 15)]
+        public DateTime? DueDate { get; set; }
+        public bool ShouldSerializeDueDate()
+        {
+            return DueDate != null;
+        }
 
         private BCFTopic()
         { }
@@ -205,6 +213,7 @@ namespace Xbim.BCF.XMLNodes
             ModifiedAuthor = (String)node.Element("ModifiedAuthor") ?? "";
             AssignedTo = (String)node.Element("AssignedTo") ?? "";
             TopicStatus = (String)node.Element("TopicStatus") ?? "";
+            DueDate = (DateTime?)node.Element("DueDate") ?? null;
 
             var bimSnippet = node.Elements("BimSnippet").FirstOrDefault();
             if (bimSnippet != null)

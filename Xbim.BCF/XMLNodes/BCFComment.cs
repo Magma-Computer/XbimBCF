@@ -188,7 +188,7 @@ namespace Xbim.BCF.XMLNodes
             Topic = new AttrIDNode(topicId);
         }
 
-        public BCFComment(XElement node)
+        public BCFComment(XElement node, Guid topicGuid)
         {
             this.Guid = (System.Guid?)node.Attribute("Guid") ?? System.Guid.Empty;
             Status = (String)node.Element("Status") ?? "";
@@ -198,7 +198,7 @@ namespace Xbim.BCF.XMLNodes
             ModifiedDate = (DateTime?)node.Element("ModifiedDate") ?? null;
             ModifiedAuthor = (String)node.Element("ModifiedAuthor") ?? "";
             VerbalStatus = (String)node.Element("VerbalStatus") ?? "";
-            Topic = new AttrIDNode(node.Element("Topic"));
+            Topic = new AttrIDNode(topicGuid);
 
             var reply = node.Elements("ReplyToComment").FirstOrDefault();
             if (reply != null)

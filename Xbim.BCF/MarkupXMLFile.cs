@@ -32,7 +32,7 @@ namespace Xbim.BCF
             Topic = new BCFTopic(xdoc.Root.Element("Topic"));
             foreach (var comment in (xdoc.Root.Elements("Comment")))
             {
-                Comments.Add(new BCFComment(comment));
+                Comments.Add(new BCFComment(comment, Topic.Guid));
             }
             foreach (var v in xdoc.Root.Elements("Viewpoints"))
             {

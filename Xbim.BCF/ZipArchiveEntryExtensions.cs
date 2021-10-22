@@ -3,6 +3,7 @@ using System.IO.Compression;
 
 namespace Xbim.BCF
 {
+	[Serializable]
     public static class ZipArchiveEntryExtensions
     {
         public static Guid ExtractGuidFolderName(this ZipArchiveEntry entry)

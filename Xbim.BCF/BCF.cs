@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Xbim.BCF.XMLNodes;
-using System.IO.Compression;
 using System.IO;
+using System.IO.Compression;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Xbim.BCF
 {
+	[Serializable]
     public class BCF
     {
         /// <summary>

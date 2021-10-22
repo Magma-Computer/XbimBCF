@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 
 namespace Xbim.BCF.XMLNodes
 {
+	[Serializable]
     [XmlType("Line")]
     public class BCFLine
     {

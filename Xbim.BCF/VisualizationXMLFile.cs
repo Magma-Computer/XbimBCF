@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Xml.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using Xbim.BCF.XMLNodes;
 
 namespace Xbim.BCF
 {
+	[Serializable]
     [XmlType("VisualizationInfo")]
     public class VisualizationXMLFile
     {

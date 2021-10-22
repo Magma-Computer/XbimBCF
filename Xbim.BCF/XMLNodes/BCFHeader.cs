@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 
 namespace Xbim.BCF.XMLNodes
 {
+	[Serializable]
     public class BCFHeader
     {
         [XmlElement("File")]

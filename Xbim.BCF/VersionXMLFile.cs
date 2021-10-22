@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 
 namespace Xbim.BCF
 {
+	[Serializable]
     [XmlType("Version")]
     public class VersionXMLFile
     {

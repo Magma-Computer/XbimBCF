@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 
 namespace Xbim.BCF.XMLNodes
 {
+	[Serializable]
     public class BCFTopic
     {
         private Guid _guid;

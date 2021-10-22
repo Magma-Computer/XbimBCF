@@ -5,6 +5,7 @@ using Xbim.BCF.XMLNodes;
 
 namespace Xbim.BCF
 {
+	[Serializable]
     [XmlType("ProjectExtension")]
     public class ProjectXMLFile
     {

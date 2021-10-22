@@ -1,5 +1,8 @@
-﻿namespace Xbim.BCF
+﻿using System;
+
+namespace Xbim.BCF
 {
+	[Serializable]
     public class Vector
     {
         public double X { get; set; }

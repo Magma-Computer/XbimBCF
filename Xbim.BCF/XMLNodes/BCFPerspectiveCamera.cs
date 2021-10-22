@@ -3,6 +3,7 @@ using System.Xml.Linq;
 
 namespace Xbim.BCF.XMLNodes
 {
+	[Serializable]
     public class BCFPerspectiveCamera
     {
         Vector _cameraViewPoint;

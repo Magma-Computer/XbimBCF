@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Xbim.BCF.XMLNodes;
 
 namespace Xbim.BCF
 {
+	[Serializable]
     [XmlType("Markup")]
     public class MarkupXMLFile
     {

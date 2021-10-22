@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 namespace Xbim.BCF.XMLNodes
 {
+	[Serializable]
     public class BCFViewpoint
     {
         private Guid _guid;

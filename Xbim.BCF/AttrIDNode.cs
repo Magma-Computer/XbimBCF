@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 
 namespace Xbim.BCF
 {
+	[Serializable]
     public class AttrIDNode
     {
         private Guid _id;

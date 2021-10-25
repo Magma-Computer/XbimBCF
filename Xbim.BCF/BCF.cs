@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -39,7 +40,7 @@ namespace Xbim.BCF
             Topic currentTopic = null;
             Guid currentGuid = Guid.Empty;
             ZipArchive archive = new ZipArchive(BCFZipData);
-            foreach (ZipArchiveEntry entry in archive.Entries)
+            foreach (ZipArchiveEntry entry in archive.Entries.OrderBy(x => x.FullName))
             {
                 if (entry.FullName.EndsWith(".bcfp", StringComparison.OrdinalIgnoreCase))
                 {

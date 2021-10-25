@@ -72,9 +72,9 @@ namespace Xbim.BCF.XMLNodes
             get { return _fieldOfView; }
             set
             {
-                if (value == double.NaN || value < 45 || value > 60)
+                if (value == double.NaN)
                 {
-                    throw new ArgumentException(this.GetType().Name + " - FieldOfView - must be a valid 64-bit floating-point value between 45 and 60");
+                    throw new ArgumentException(this.GetType().Name + " - FieldOfView - must be a valid 64-bit floating-point value");
                 }
                 else
                 {

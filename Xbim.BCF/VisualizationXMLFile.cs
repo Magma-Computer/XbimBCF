@@ -13,28 +13,32 @@ namespace Xbim.BCF
     {
         [XmlArray(Order = 1)]
         public List<BCFComponent> Components;
-        [XmlElement(Order = 2)]
-        public BCFOrthogonalCamera OrthogonalCamera { get; set; }
+        [XmlElement(ElementName = "Components", Order = 2)]
+        public BCFComponents Components_2_1;
         [XmlElement(Order = 3)]
+        public BCFOrthogonalCamera OrthogonalCamera { get; set; }
+        [XmlElement(Order = 4)]
         public BCFPerspectiveCamera PerspectiveCamera { get; set; }
-        [XmlArray(Order = 4)]
-        public List<BCFLine> Lines;
         [XmlArray(Order = 5)]
+        public List<BCFLine> Lines;
+        [XmlArray(Order = 6)]
         public List<BCFClippingPlane> ClippingPlanes;
-        [XmlElement(ElementName = "Bitmaps", Order = 6)]
+        [XmlElement(ElementName = "Bitmaps", Order = 7)]
         public List<BCFBitmap> Bitmaps;
 
         public VisualizationXMLFile()
         {
             Components = new List<BCFComponent>();
+            Components_2_1 = new BCFComponents();
             Lines = new List<BCFLine>();
             ClippingPlanes = new List<BCFClippingPlane>();
             Bitmaps = new List<BCFBitmap>();
         }
 
-        public VisualizationXMLFile(XDocument xdoc)
+        public VisualizationXMLFile(XDocument xdoc, bool isLower_2_1)
         {
             Components = new List<BCFComponent>();
+            Components_2_1 = new BCFComponents();                
             Lines = new List<BCFLine>();
             ClippingPlanes = new List<BCFClippingPlane>();
             Bitmaps = new List<BCFBitmap>();
@@ -51,10 +55,19 @@ namespace Xbim.BCF
             }
             if (xdoc.Root.Element("Components") != null && xdoc.Root.Element("Components").Elements("Component") != null)
 			{
-                foreach (var comp in xdoc.Root.Element("Components").Elements("Component"))
-                {
-                    Components.Add(new BCFComponent(comp));
+                if (isLower_2_1)
+				{
+                    foreach (var comp in xdoc.Root.Element("Components").Elements("Component"))
+                    {
+                        Components.Add(new BCFComponent(comp));
+                    }
                 }
+
+				else
+				{
+                    var components = xdoc.Root.Element("Components");
+                    Components_2_1 = new BCFComponents(components);
+				}
             }
             var lines = xdoc.Root.Elements("Lines").FirstOrDefault();
             if (lines != null)

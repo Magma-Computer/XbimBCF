@@ -25,7 +25,7 @@ namespace Xbim.BCF.Tests
         [DeploymentItem("XML\\markup.xml")]
         public void DeserializeMarkupXML()
         {
-            MarkupXMLFile xmlObj = new MarkupXMLFile(XDocument.Load("markup.xml"));
+            MarkupXMLFile xmlObj = new MarkupXMLFile(XDocument.Load("markup.xml"), true);
             //Comments
             Assert.IsTrue(xmlObj.Comments.Count > 0);
             Assert.IsNotNull(xmlObj.Comments[0].Guid);
@@ -92,7 +92,7 @@ namespace Xbim.BCF.Tests
         [DeploymentItem("XML\\visinfo.xml")]
         public void DeserializeVisualizationXML()
         {
-            VisualizationXMLFile xmlObj = new VisualizationXMLFile(XDocument.Load("visinfo.xml"));
+            VisualizationXMLFile xmlObj = new VisualizationXMLFile(XDocument.Load("visinfo.xml"), true);
 
             //Bitmaps
             Assert.IsTrue(xmlObj.Bitmaps.Count > 0);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -40,16 +41,31 @@ namespace Xbim.BCF
             Topic currentTopic = null;
             Guid currentGuid = Guid.Empty;
             ZipArchive archive = new ZipArchive(BCFZipData);
+            bool isLower_2_1 = false;
+            foreach (ZipArchiveEntry entry in archive.Entries.OrderBy(x => x.FullName))
+            {
+                if (entry.FullName.EndsWith(".version", StringComparison.OrdinalIgnoreCase))
+                {
+                    bcf.Version = new VersionXMLFile(XDocument.Load(entry.Open()));
+                    if (bcf.Version != null && !string.IsNullOrEmpty(bcf.Version.VersionId))
+                    {
+                        double version = 1.0;
+                        double parseResult;
+                        double.TryParse(bcf.Version.VersionId, NumberStyles.Any, CultureInfo.InvariantCulture, out parseResult);
+
+                        if (parseResult > version)
+                            version = parseResult;
+
+                        isLower_2_1 = version < 2.1;
+                    }
+                }
+            }
             foreach (ZipArchiveEntry entry in archive.Entries.OrderBy(x => x.FullName))
             {
                 if (entry.FullName.EndsWith(".bcfp", StringComparison.OrdinalIgnoreCase))
                 {
                     bcf.Project = new ProjectXMLFile(XDocument.Load(entry.Open()));
-                }
-                else if (entry.FullName.EndsWith(".version", StringComparison.OrdinalIgnoreCase))
-                {
-                    bcf.Version = new VersionXMLFile(XDocument.Load(entry.Open()));
-                }
+                }                
                 else if (entry.FullName.EndsWith(".bcf", StringComparison.OrdinalIgnoreCase))
                 {
                     if (entry.ExtractGuidFolderName() != currentGuid)
@@ -61,7 +77,7 @@ namespace Xbim.BCF
                         currentGuid = entry.ExtractGuidFolderName();
                         currentTopic = new Topic();
                     }
-                    currentTopic.Markup = new MarkupXMLFile(XDocument.Load(entry.Open()));
+                    currentTopic.Markup = new MarkupXMLFile(XDocument.Load(entry.Open()), isLower_2_1);
                 }
                 else if (entry.FullName.EndsWith(".bcfv", StringComparison.OrdinalIgnoreCase))
                 {
@@ -74,7 +90,7 @@ namespace Xbim.BCF
                         currentGuid = entry.ExtractGuidFolderName();
                         currentTopic = new Topic();
                     }
-                    currentTopic.Visualizations.Add(new KeyValuePair<string, VisualizationXMLFile>(entry.Name.Substring(0, entry.Name.IndexOf(".")), new VisualizationXMLFile(XDocument.Load(entry.Open()))));
+                    currentTopic.Visualizations.Add(new KeyValuePair<string, VisualizationXMLFile>(entry.Name.Substring(0, entry.Name.IndexOf(".")), new VisualizationXMLFile(XDocument.Load(entry.Open()), isLower_2_1)));
                 }
                 else if (entry.FullName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
                 {

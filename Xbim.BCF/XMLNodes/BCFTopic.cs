@@ -63,9 +63,14 @@ namespace Xbim.BCF.XMLNodes
         /// </summary>
         [XmlElement(Order = 2)]
         public String ReferenceLink { get; set; }
+
+        [XmlElement(ElementName = "ReferenceLink", Order = 102)]
+        public List<String> ReferenceLinks;
         public bool ShouldSerializeReferenceLink()
         {
-            return !string.IsNullOrEmpty(ReferenceLink);
+            return
+                !string.IsNullOrEmpty(ReferenceLink) ||
+                ReferenceLinks != null && ReferenceLinks.Count > 0;
         }
         /// <summary>
         /// Description of the topic
@@ -166,6 +171,14 @@ namespace Xbim.BCF.XMLNodes
         {
             return DocumentReferences != null && DocumentReferences.Count > 0;
         }
+
+        [XmlElement(ElementName = "DocumentReference", Order = 113)]
+        public List<BCFDocumentReference> DocumentReference;
+        public bool ShouldSerializeDocumentReference()
+        {
+            return DocumentReferences != null && DocumentReferences.Count > 0;
+        }
+
         /// <summary>
         /// Relation between topics (Clash -> PfV -> Opening)
         /// </summary>
@@ -184,6 +197,15 @@ namespace Xbim.BCF.XMLNodes
         {
             return DueDate != null;
         }
+        /// <summary>
+        /// Stage
+        /// </summary>
+        [XmlElement(Order = 16)]
+        public String Stage { get; set; }
+        public bool ShouldSerializeStage()
+        {
+            return !string.IsNullOrEmpty(Stage);
+        }
 
         private BCFTopic()
         { }
@@ -194,9 +216,10 @@ namespace Xbim.BCF.XMLNodes
             Title = title;
             DocumentReferences = new List<BCFDocumentReference>();
             RelatedTopics = new List<BCFRelatedTopic>();
+            ReferenceLinks = new List<string>();
         }
 
-        public BCFTopic(XElement node)
+        public BCFTopic(XElement node, bool isLower_2_1)
         {
             DocumentReferences = new List<BCFDocumentReference>();
             RelatedTopics = new List<BCFRelatedTopic>();
@@ -204,7 +227,6 @@ namespace Xbim.BCF.XMLNodes
             this.Guid = Guid.Parse((String)node.Attribute("Guid") ?? "");
             Title = (String)node.Element("Title") ?? "";
             TopicType = (String)node.Attribute("TopicType") ?? "";
-            ReferenceLink = (String)node.Element("ReferenceLink") ?? "";
             Description = (String)node.Element("Description") ?? "";
             Priority = (String)node.Element("Priority") ?? "";
             Index = (int?)node.Element("Index") ?? null;
@@ -215,6 +237,24 @@ namespace Xbim.BCF.XMLNodes
             AssignedTo = (String)node.Element("AssignedTo") ?? "";
             TopicStatus = (String)node.Element("TopicStatus") ?? "";
             DueDate = (DateTime?)node.Element("DueDate") ?? null;
+            Stage = (String)node.Element("Stage") ?? "";
+
+            if (isLower_2_1)
+			{
+                ReferenceLink = (String)node.Element("ReferenceLink") ?? "";                
+            }
+
+			else
+			{
+                var refLinks = node.Elements("ReferenceLink").FirstOrDefault();
+                if (refLinks != null)
+                {
+                    foreach (var refLink in node.Elements("ReferenceLink"))
+                    {
+                        ReferenceLinks.Add(refLink.Value);
+                    }
+                }
+            }
 
             var bimSnippet = node.Elements("BimSnippet").FirstOrDefault();
             if (bimSnippet != null)
@@ -222,10 +262,15 @@ namespace Xbim.BCF.XMLNodes
                 BimSnippet = new BCFBimSnippet(bimSnippet);
             }
 
-            var docRefs = node.Elements("DocumentReferences").FirstOrDefault();
+            string docRefElementName = "DocumentReference";
+
+            if (isLower_2_1)
+                docRefElementName = "DocumentReferences";
+
+            var docRefs = node.Elements(docRefElementName).FirstOrDefault();
             if (docRefs != null)
             {
-                foreach (var dref in node.Elements("DocumentReferences"))
+                foreach (var dref in node.Elements(docRefElementName))
                 {
                     DocumentReferences.Add(new BCFDocumentReference(dref));
                 }

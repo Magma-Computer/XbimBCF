@@ -64,7 +64,7 @@ namespace Xbim.BCF.XMLNodes
         [XmlElement(Order = 2)]
         public String ReferenceLink { get; set; }
 
-        [XmlElement(ElementName = "ReferenceLink", Order = 102)]
+        [XmlElement(ElementName = "ReferenceLink", Order = 3)]
         public List<String> ReferenceLinks;
         public bool ShouldSerializeReferenceLink()
         {
@@ -75,7 +75,7 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// Description of the topic
         /// </summary>
-        [XmlElement(Order = 3)]
+        [XmlElement(Order = 4)]
         public String Description { get; set; }
         public bool ShouldSerializeDescription()
         {
@@ -84,7 +84,7 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// Topic priority. The list of possible values are defined in the extension schema
         /// </summary>
-        [XmlElement(Order = 4)]
+        [XmlElement(Order = 5)]
         public String Priority { get; set; }
         public bool ShouldSerializePriority()
         {
@@ -93,7 +93,7 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// Number to maintain the order of the topics
         /// </summary>
-        [XmlElement(Order = 5)]
+        [XmlElement(Order = 6)]
         public int? Index { get; set; }
         public bool ShouldSerializeIndex()
         {
@@ -102,7 +102,7 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// Date when the topic was created
         /// </summary>
-        [XmlElement(Order = 6)]
+        [XmlElement(Order = 7)]
         public DateTime? CreationDate { get; set; }
         public bool ShouldSerializeCreationDate()
         {
@@ -111,7 +111,7 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// User who created the topic
         /// </summary>
-        [XmlElement(Order = 7)]
+        [XmlElement(Order = 8)]
         public String CreationAuthor { get; set; }
         public bool ShouldSerializeCreationAuthor()
         {
@@ -120,7 +120,7 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// Date when the topic was last modified
         /// </summary>
-        [XmlElement(Order = 8)]
+        [XmlElement(Order = 9)]
         public DateTime? ModifiedDate { get; set; }
         public bool ShouldSerializeModifiedDate()
         {
@@ -129,16 +129,25 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// User who modified the topic
         /// </summary>
-        [XmlElement(Order = 9)]
+        [XmlElement(Order = 10)]
         public String ModifiedAuthor { get; set; }
         public bool ShouldSerializeModifiedAuthor()
         {
             return !string.IsNullOrEmpty(ModifiedAuthor);
         }
         /// <summary>
+        /// Date until when the topics issue needs to be resolved
+        /// </summary>
+        [XmlElement(Order = 11)]
+        public DateTime? DueDate { get; set; }
+        public bool ShouldSerializeDueDate()
+        {
+            return DueDate != null;
+        }
+        /// <summary>
         /// The user to whom this topic is assigned to
         /// </summary>
-        [XmlElement(Order = 10)]
+        [XmlElement(Order = 12)]
         public String AssignedTo { get; set; }
         public bool ShouldSerializeAssignedTo()
         {
@@ -147,7 +156,7 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// The status of the topic (the options can be specified in the extension schema)
         /// </summary>
-        [XmlElement(Order = 11)]
+        [XmlElement(Order = 13)]
         public String TopicStatus { get; set; }
         public bool ShouldSerializeTopicStatus()
         {
@@ -156,7 +165,7 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// BimSnippet is an additional file containing information related to one or multiple topics. For example, it can be an IFC file containing provisions for voids.
         /// </summary>
-        [XmlElement(Order = 12)]
+        [XmlElement(Order = 14)]
         public BCFBimSnippet BimSnippet { get; set; }
         public bool ShouldSerializeBimSnippet()
         {
@@ -165,14 +174,14 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// DocumentReference provides a means to associate additional payloads or links with topics. The references may point to a file within the .bcfzip or to an external location.
         /// </summary>
-        [XmlElement(ElementName = "DocumentReferences", Order = 13)]
+        [XmlElement(ElementName = "DocumentReferences", Order = 15)]
         public List<BCFDocumentReference> DocumentReferences;
         public bool ShouldSerializeDocumentReferences()
         {
             return DocumentReferences != null && DocumentReferences.Count > 0;
         }
 
-        [XmlElement(ElementName = "DocumentReference", Order = 113)]
+        [XmlElement(ElementName = "DocumentReference", Order = 16)]
         public List<BCFDocumentReference> DocumentReference;
         public bool ShouldSerializeDocumentReference()
         {
@@ -182,25 +191,16 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// Relation between topics (Clash -> PfV -> Opening)
         /// </summary>
-        [XmlElement(ElementName = "RelatedTopics", Order = 14)]
+        [XmlElement(ElementName = "RelatedTopics", Order = 17)]
         public List<BCFRelatedTopic> RelatedTopics;
         public bool ShouldSerializeRelatedTopics()
         {
             return RelatedTopics != null && RelatedTopics.Count > 0;
         }
         /// <summary>
-        /// Date until when the topics issue needs to be resolved
-        /// </summary>
-        [XmlElement(Order = 15)]
-        public DateTime? DueDate { get; set; }
-        public bool ShouldSerializeDueDate()
-        {
-            return DueDate != null;
-        }
-        /// <summary>
         /// Stage
         /// </summary>
-        [XmlElement(Order = 16)]
+        [XmlElement(Order = 18)]
         public String Stage { get; set; }
         public bool ShouldSerializeStage()
         {
@@ -234,10 +234,10 @@ namespace Xbim.BCF.XMLNodes
             CreationAuthor = (String)node.Element("CreationAuthor") ?? "";
             ModifiedDate = (DateTime?)node.Element("ModifiedDate") ?? null;
             ModifiedAuthor = (String)node.Element("ModifiedAuthor") ?? "";
+            DueDate = (DateTime?)node.Element("DueDate") ?? null;
             AssignedTo = (String)node.Element("AssignedTo") ?? "";
             TopicStatus = (String)node.Element("TopicStatus") ?? "";
-            DueDate = (DateTime?)node.Element("DueDate") ?? null;
-            Stage = (String)node.Element("Stage") ?? "";
+            Stage = (String)node.Element("Stage") ?? null;
 
             if (isLower_2_1)
 			{

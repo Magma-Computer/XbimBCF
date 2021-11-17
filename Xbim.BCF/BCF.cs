@@ -41,7 +41,7 @@ namespace Xbim.BCF
             Topic currentTopic = null;
             Guid currentGuid = Guid.Empty;
             ZipArchive archive = new ZipArchive(BCFZipData);
-            bool isLower_2_1 = false;
+            bool isLower_2_1 = true;
             foreach (ZipArchiveEntry entry in archive.Entries.OrderBy(x => x.FullName))
             {
                 if (entry.FullName.EndsWith(".version", StringComparison.OrdinalIgnoreCase))

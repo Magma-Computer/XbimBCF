@@ -5,60 +5,75 @@ using System.Xml.Serialization;
 namespace Xbim.BCF.XMLNodes
 {
 	[Serializable]
-    [XmlType("Line")]
-    public class BCFLine
-    {
-        private Vector _startPoint;
-        public Vector StartPoint
-        {
-            get { return _startPoint; }
-            set
-            {
-                if (value.X == double.NaN || value.Y == double.NaN || value.Z == double.NaN)
-                {
-                    throw new ArgumentException(this.GetType().Name + " - StartPoint - must contain X, Y and Z nodes containing a valid 64-bit floating-point value");
-                }
-                else
-                {
-                    _startPoint = value;
-                }
-            }
-        }
-        private Vector _endPoint;
-        public Vector EndPoint
-        {
-            get { return _endPoint; }
-            set
-            {
-                if (value.X == double.NaN || value.Y == double.NaN || value.Z == double.NaN)
-                {
-                    throw new ArgumentException(this.GetType().Name + " - EndPoint - must contain X, Y and Z nodes containing a valid 64-bit floating-point value");
-                }
-                else
-                {
-                    _endPoint = value;
-                }
-            }
-        }
+	[XmlType("Line")]
+	public class BCFLine
+	{
+		private Vector _startPoint;
 
-        private BCFLine()
-        { }
+		public Vector StartPoint
+		{
+			get
+			{
+				return _startPoint;
+			}
 
-        public BCFLine(Vector startpoint, Vector endpoint)
-        {
-            StartPoint = startpoint;
-            EndPoint = endpoint;
-        }
+			set
+			{
+				if (value.X == double.NaN || value.Y == double.NaN || value.Z == double.NaN)
+				{
+					throw new ArgumentException(GetType().Name + " - StartPoint - must contain X, Y and Z nodes containing a valid 64-bit floating-point value");
+				}
 
-        public BCFLine(XElement node)
-        {
-            StartPoint = new Vector((double?)node.Element("StartPoint").Element("X") ?? double.NaN,
-                                                                   (double?)node.Element("StartPoint").Element("Y") ?? double.NaN,
-                                                                   (double?)node.Element("StartPoint").Element("Z") ?? double.NaN);
+				else
+				{
+					_startPoint = value;
+				}
+			}
+		}
+		private Vector _endPoint;
 
-            EndPoint = new Vector((double?)node.Element("EndPoint").Element("X") ?? double.NaN,
-                                                                   (double?)node.Element("EndPoint").Element("Y") ?? double.NaN,
-                                                                   (double?)node.Element("EndPoint").Element("Z") ?? double.NaN);
-        }
-    }
+		public Vector EndPoint
+		{
+			get
+			{
+				return _endPoint;
+			}
+
+			set
+			{
+				if (value.X == double.NaN || value.Y == double.NaN || value.Z == double.NaN)
+				{
+					throw new ArgumentException(GetType().Name + " - EndPoint - must contain X, Y and Z nodes containing a valid 64-bit floating-point value");
+				}
+
+				else
+				{
+					_endPoint = value;
+				}
+			}
+		}
+
+		private BCFLine() { }
+
+		public BCFLine(Vector startpoint, Vector endpoint)
+		{
+			StartPoint = startpoint;
+			EndPoint = endpoint;
+		}
+
+		public BCFLine(XElement node)
+		{
+			StartPoint =
+				new Vector(
+					(double?)node.Element("StartPoint").Element("X") ?? double.NaN,
+					(double?)node.Element("StartPoint").Element("Y") ?? double.NaN,
+					(double?)node.Element("StartPoint").Element("Z") ?? double.NaN);
+
+			EndPoint =
+				new Vector(
+					(double?)node.Element("EndPoint").Element("X") ?? double.NaN,
+					(double?)node.Element("EndPoint").Element("Y") ?? double.NaN,
+					(double?)node.Element("EndPoint").Element("Z") ?? double.NaN);
+		}
+	}
 }

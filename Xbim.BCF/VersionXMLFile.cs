@@ -5,45 +5,51 @@ using System.Xml.Serialization;
 namespace Xbim.BCF
 {
 	[Serializable]
-    [XmlType("Version")]
-    public class VersionXMLFile
-    {
-        public String DetailedVersion { get; set; }
-        public bool ShouldSerializeDetailedVersion()
-        {
-            return !string.IsNullOrEmpty(DetailedVersion);
-        }
+	[XmlType("Version")]
+	public class VersionXMLFile
+	{
+		public string DetailedVersion { get; set; }
 
-        private String _versionId;
-        [XmlAttribute]
-        public String VersionId
-        {
-            get { return _versionId; }
-            set
-            {
-                if (String.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentException(this.GetType().Name + " - VersionId is mandatory");
-                }
-                else
-                {
-                    _versionId = value;
-                }
-            }
-        }
+		public bool ShouldSerializeDetailedVersion()
+		{
+			return !string.IsNullOrEmpty(DetailedVersion);
+		}
 
-        private VersionXMLFile()
-        { }
+		private string _versionId;
 
-        public VersionXMLFile(String versionID)
-        {
-            VersionId = versionID;
-        }
+		[XmlAttribute]
+		public string VersionId
+		{
+			get
+			{
+				return _versionId;
+			}
 
-        public VersionXMLFile(XDocument xdoc)
-        {
-            VersionId = (string)xdoc.Root.Attribute("VersionId") ?? "";
-            DetailedVersion = (string)xdoc.Root.Element("DetailedVersion") ?? "";
-        }
-    }
+			set
+			{
+				if (string.IsNullOrEmpty(value))
+				{
+					throw new ArgumentException(GetType().Name + " - VersionId is mandatory");
+				}
+
+				else
+				{
+					_versionId = value;
+				}
+			}
+		}
+
+		private VersionXMLFile() { }
+
+		public VersionXMLFile(string versionID)
+		{
+			VersionId = versionID;
+		}
+
+		public VersionXMLFile(XDocument xdoc)
+		{
+			VersionId = (string)xdoc.Root.Attribute("VersionId") ?? "";
+			DetailedVersion = (string)xdoc.Root.Element("DetailedVersion") ?? "";
+		}
+	}
 }

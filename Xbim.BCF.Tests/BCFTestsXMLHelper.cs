@@ -172,8 +172,8 @@ namespace Xbim.BCF.Tests
             c.Color = "7FFFFFFF";
             c.IfcGuid = "IfcGuid______________1";
             c.OriginatingSystem = "testOriginatingSystem";
-            c.Selected = true;
-            c.Visible = true;
+            c.Selected = true.ToString();
+            c.Visible = true.ToString();
             xmlObj.Components.Add(c);
             xmlObj.Components.Add(c);
 

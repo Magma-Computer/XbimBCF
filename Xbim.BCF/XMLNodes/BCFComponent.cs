@@ -76,26 +76,72 @@ namespace Xbim.BCF.XMLNodes
             return !string.IsNullOrEmpty(AuthoringToolId);
         }
         /// <summary>
-        /// This flag is true if the component is actually involved in the topic. If the flag is false, the component is involved as reference
+        /// Attribute, which store Selected value in bool? type
         /// </summary>
-        [XmlAttribute]
-        public bool Selected { get; set; }
-        /// <summary>
-        /// This flag is true when the component is visible in the visualization. 
-        /// By setting this false, you can hide components that would prevent seeing the topic from the camera position and angle of the viewpoint.
-        /// Default is true.
-        /// </summary>
-        [XmlAttribute]
-        public bool Visible { get; set; }
+        [XmlIgnore]
+		public bool? _selected;
+		/// <summary>
+		/// Selected attribute, which can be null and not displayed in BCF 1.0
+		/// </summary>
+		[XmlAttribute]
+		public string Selected
+		{
+			get
+			{
+				if (_selected.HasValue)
+				{
+                    string selectedStringValue = _selected.Value.ToString().ToLower();
+                    return selectedStringValue;
+                }					
+				else
+					return null;
+			}
+			set
+			{
+				if (value != null)
+					_selected = bool.Parse(value);
+				else
+					_selected = null;
+			}
+		}
+		/// <summary>
+		/// Attribute, which store Visible value in bool? type
+		/// </summary>
+		[XmlIgnore]
+		public bool? _visible;
+		/// <summary>
+		/// Visibility attribute, which can be null and not displayed in BCF 1.0
+		/// </summary>
+		[XmlAttribute]
+		public string Visible
+		{
+			get
+			{
+				if (_visible.HasValue)
+				{
+                    string visibleStringValue = _visible.Value.ToString().ToLower();
+                    return visibleStringValue;
+                }					
+				else
+					return null;
+			}
+			set
+			{
+				if (value != null)
+					_visible = bool.Parse(value);
+				else
+					_visible = null;
+			}
+		}		
 
-        public BCFComponent()
+		public BCFComponent()
         { }
 
         public BCFComponent(XElement node)
         {
             IfcGuid = (String)node.Attribute("IfcGuid") ?? "";
-            Visible = (bool?)node.Attribute("Visible") ?? true;
-            Selected = (bool?)node.Attribute("Selected") ?? false;
+            Visible = (String)node.Attribute("Visible") ?? null;
+            Selected = (String)node.Attribute("Selected") ?? null;
             Color = (String)node.Attribute("Color") ?? "";
             OriginatingSystem = (String)node.Element("OriginatingSystem") ?? "";
             AuthoringToolId = (String)node.Element("AuthoringToolId") ?? "";

@@ -31,7 +31,7 @@ namespace Xbim.BCF.XMLNodes
 
 				else
 				{
-					_color = "000000";
+					_color = null;
 				}
 			}
 		}

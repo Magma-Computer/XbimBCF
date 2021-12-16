@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace Xbim.BCF.XMLNodes
 {
 	[Serializable]
-	[XmlType("Component_2_1")]
+	[XmlType(TypeName = "Component")]
 	public class BCFComponent_2_1
 	{
 		private string _ifcGuid;

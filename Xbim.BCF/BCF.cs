@@ -99,7 +99,17 @@ namespace Xbim.BCF
 						currentTopic = new Topic();
 					}
 
-					currentTopic.Visualizations.Add(new KeyValuePair<string, VisualizationXMLFile>(entry.Name.Substring(0, entry.Name.IndexOf(".")), new VisualizationXMLFile(XDocument.Load(entry.Open()), isLower_2_1)));
+					string entryName = entry.Name.Substring(0, entry.Name.IndexOf("."));
+
+					if (isLower_2_1)
+					{
+						currentTopic.Visualizations.Add(new KeyValuePair<string, VisualizationXMLFile>(entryName, new VisualizationXMLFile_lower_2_1(XDocument.Load(entry.Open()))));
+					}
+
+					else
+					{
+						currentTopic.Visualizations.Add(new KeyValuePair<string, VisualizationXMLFile>(entryName, new VisualizationXMLFile_2_1(XDocument.Load(entry.Open()))));
+					}
 				}
 
 				else if (entry.FullName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
@@ -136,7 +146,18 @@ namespace Xbim.BCF
 		public Stream Serialize()
 		{
 			XmlSerializer bcfSerializer = new XmlSerializer(typeof(MarkupXMLFile));
-			XmlSerializer bcfvSerializer = new XmlSerializer(typeof(VisualizationXMLFile));
+
+			XmlSerializer bcfvSerializer;
+			if (Version.VersionId == "2.1")
+			{
+				bcfvSerializer = new XmlSerializer(typeof(VisualizationXMLFile_2_1));
+			}
+
+			else
+			{
+				bcfvSerializer = new XmlSerializer(typeof(VisualizationXMLFile_lower_2_1));
+			}
+
 			XmlSerializer bcfpSerializer = new XmlSerializer(typeof(ProjectXMLFile));
 			XmlSerializer versionSerializer = new XmlSerializer(typeof(VersionXMLFile));
 
@@ -200,7 +221,7 @@ namespace Xbim.BCF
 						}
 					}
 
-					foreach (KeyValuePair<String, byte[]> img in t.Snapshots)
+					foreach (KeyValuePair<string, byte[]> img in t.Snapshots)
 					{
 						string snapshotName = string.Format("{0}/{1}.png", t.Markup.Topic.Guid, img.Key);
 						var png = archive.CreateEntry(snapshotName);

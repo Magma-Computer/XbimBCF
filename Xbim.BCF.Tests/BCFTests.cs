@@ -94,7 +94,7 @@ namespace Xbim.BCF.Tests
 		[DeploymentItem("XML\\visinfo.xml")]
 		public void DeserializeVisualizationXML()
 		{
-			VisualizationXMLFile xmlObj = new VisualizationXMLFile(XDocument.Load("visinfo.xml"), true);
+			VisualizationXMLFile_lower_2_1 xmlObj = new VisualizationXMLFile_lower_2_1(XDocument.Load("visinfo.xml"));
 
 			//Bitmaps
 			Assert.IsTrue(xmlObj.Bitmaps.Count > 0);
@@ -213,7 +213,7 @@ namespace Xbim.BCF.Tests
 		public void SchemaValidateVisualizationXML()
 		{
 			XmlSchema visualizationSchema = BCFTestsXMLHelper.GetSchema("visinfo.xsd");
-			XmlSerializer visualizationSerializer = new XmlSerializer(typeof(VisualizationXMLFile));
+			XmlSerializer visualizationSerializer = new XmlSerializer(typeof(VisualizationXMLFile_lower_2_1));
 			XmlDocument visualizationXML = new XmlDocument();
 
 			using (MemoryStream stream = new MemoryStream())

@@ -14,17 +14,17 @@ namespace Xbim.BCF
 		/// <summary>
 		/// .bcfv Files Projections
 		/// </summary>
-		public List<KeyValuePair<String, VisualizationXMLFile>> Visualizations;
+		public List<KeyValuePair<string, VisualizationXMLFile>> Visualizations;
 
 		/// <summary>
 		/// Collection of key/value pairs representing the (Key)name and (Value)Base64 string representations of a .png file associated with the topic
 		/// </summary>
-		public List<KeyValuePair<String, byte[]>> Snapshots;
+		public List<KeyValuePair<string, byte[]>> Snapshots;
 
 		public Topic()
 		{
-			Visualizations = new List<KeyValuePair<String, VisualizationXMLFile>>();
-			Snapshots = new List<KeyValuePair<String, byte[]>>();
+			Visualizations = new List<KeyValuePair<string, VisualizationXMLFile>>();
+			Snapshots = new List<KeyValuePair<string, byte[]>>();
 		}
 	}
 }

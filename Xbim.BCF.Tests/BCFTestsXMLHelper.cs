@@ -171,9 +171,9 @@ namespace Xbim.BCF.Tests
 			return xmlObj;
 		}
 
-		public static VisualizationXMLFile BuildVisualizationObject()
+		public static VisualizationXMLFile_lower_2_1 BuildVisualizationObject()
 		{
-			VisualizationXMLFile xmlObj = new VisualizationXMLFile();
+			VisualizationXMLFile_lower_2_1 xmlObj = new VisualizationXMLFile_lower_2_1();
 			Vector testVector = new Vector(1.7976931348623157E+308, 1.7976931348623157E+308, 1.7976931348623157E+308);
 
 			BCFBitmap bMap = new BCFBitmap(testVector, testVector, testVector, 1.7976931348623157E+308, "PNG", "testReference");

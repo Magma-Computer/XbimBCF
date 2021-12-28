@@ -64,14 +64,25 @@ namespace Xbim.BCF.XMLNodes
 		}
 
 		/// <summary>
-		/// The type of the topic (the options can be specified in the extension schema)
+		/// The type of the topic as attribute
 		/// </summary>
-		[XmlAttribute]
-		public string TopicType { get; set; }
+		[XmlAttribute(AttributeName = "TopicType")]
+		public string TopicType_attr { get; set; }
 
-		public bool ShouldSerializeTopicType()
+		public bool ShouldSerializeTopicTypeAttr()
 		{
-			return !string.IsNullOrEmpty(TopicType);
+			return !string.IsNullOrEmpty(TopicType_attr);
+		}
+
+		/// <summary>
+		/// TopicStatus as attribute
+		/// </summary>
+		[XmlAttribute(AttributeName = "TopicStatus")]
+		public string TopicStatus_attr { get; set; }
+
+		public bool ShouldSerializeTopicStatusAttr()
+		{
+			return !string.IsNullOrEmpty(TopicStatus_attr);
 		}
 
 		/// <summary>
@@ -189,9 +200,20 @@ namespace Xbim.BCF.XMLNodes
 		}
 
 		/// <summary>
-		/// The status of the topic (the options can be specified in the extension schema)
+		/// The type of the topic (the options can be specified in the extension schema)
 		/// </summary>
 		[XmlElement(Order = 13)]
+		public string TopicType { get; set; }
+
+		public bool ShouldSerializeTopicType()
+		{
+			return !string.IsNullOrEmpty(TopicType);
+		}
+
+		/// <summary>
+		/// The status of the topic (the options can be specified in the extension schema)
+		/// </summary>
+		[XmlElement(Order = 14)]
 		public string TopicStatus { get; set; }
 
 		public bool ShouldSerializeTopicStatus()
@@ -202,7 +224,7 @@ namespace Xbim.BCF.XMLNodes
 		/// <summary>
 		/// BimSnippet is an additional file containing information related to one or multiple topics. For example, it can be an IFC file containing provisions for voids.
 		/// </summary>
-		[XmlElement(Order = 14)]
+		[XmlElement(Order = 15)]
 		public BCFBimSnippet BimSnippet { get; set; }
 
 		public bool ShouldSerializeBimSnippet()
@@ -213,7 +235,7 @@ namespace Xbim.BCF.XMLNodes
 		/// <summary>
 		/// DocumentReference provides a means to associate additional payloads or links with topics. The references may point to a file within the .bcfzip or to an external location.
 		/// </summary>
-		[XmlElement(ElementName = "DocumentReferences", Order = 15)]
+		[XmlElement(ElementName = "DocumentReferences", Order = 16)]
 		public List<BCFDocumentReference> DocumentReferences;
 
 		public bool ShouldSerializeDocumentReferences()
@@ -221,7 +243,7 @@ namespace Xbim.BCF.XMLNodes
 			return DocumentReferences != null && DocumentReferences.Count > 0;
 		}
 
-		[XmlElement(ElementName = "DocumentReference", Order = 16)]
+		[XmlElement(ElementName = "DocumentReference", Order = 17)]
 		public List<BCFDocumentReference> DocumentReference;
 
 		public bool ShouldSerializeDocumentReference()
@@ -232,7 +254,7 @@ namespace Xbim.BCF.XMLNodes
 		/// <summary>
 		/// Relation between topics (Clash -> PfV -> Opening)
 		/// </summary>
-		[XmlElement(ElementName = "RelatedTopics", Order = 17)]
+		[XmlElement(ElementName = "RelatedTopics", Order = 18)]
 		public List<BCFRelatedTopic> RelatedTopics;
 
 		public bool ShouldSerializeRelatedTopics()
@@ -243,7 +265,7 @@ namespace Xbim.BCF.XMLNodes
 		/// <summary>
 		/// Stage
 		/// </summary>
-		[XmlElement(Order = 18)]
+		[XmlElement(Order = 19)]
 		public string Stage { get; set; }
 
 		public bool ShouldSerializeStage()
@@ -269,7 +291,8 @@ namespace Xbim.BCF.XMLNodes
 
 			Guid = Guid.Parse((string)node.Attribute("Guid") ?? "");
 			Title = (string)node.Element("Title") ?? "";
-			TopicType = (string)node.Attribute("TopicType") ?? "";
+			TopicType_attr = (string)node.Attribute("TopicType") ?? "";
+			TopicStatus_attr = (string)node.Attribute("TopicStatus") ?? "";
 			Description = (string)node.Element("Description") ?? "";
 			Priority = (string)node.Element("Priority") ?? "";
 			Index = (int?)node.Element("Index") ?? null;
@@ -279,6 +302,7 @@ namespace Xbim.BCF.XMLNodes
 			ModifiedAuthor = (string)node.Element("ModifiedAuthor") ?? "";
 			DueDate = (DateTime?)node.Element("DueDate") ?? null;
 			AssignedTo = (string)node.Element("AssignedTo") ?? "";
+			TopicType = (string)node.Element("TopicType") ?? "";
 			TopicStatus = (string)node.Element("TopicStatus") ?? "";
 			Stage = (string)node.Element("Stage") ?? null;
 

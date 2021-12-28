@@ -20,8 +20,11 @@ namespace Xbim.BCF.XMLNodes
 		{
 			Files = new List<BCFFile>();
 
-			foreach (var file in node.Elements("File"))
-				Files.Add(new BCFFile(file));
+			if (node != null)
+			{
+				foreach (var file in node.Elements("File"))
+					Files.Add(new BCFFile(file));
+			}
 		}
 	}
 }

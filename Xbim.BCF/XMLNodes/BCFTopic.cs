@@ -273,6 +273,17 @@ namespace Xbim.BCF.XMLNodes
 			return !string.IsNullOrEmpty(Stage);
 		}
 
+		/// <summary>
+		/// Labels
+		/// </summary>
+		[XmlElement(Order = 20)]
+		public List<string> Labels { get; set; }
+
+		public bool ShouldSerializeLabels()
+		{
+			return Labels != null && Labels.Count != 0;
+		}
+
 		private BCFTopic() { }
 
 		public BCFTopic(Guid topicID, string title)
@@ -344,6 +355,14 @@ namespace Xbim.BCF.XMLNodes
 			{
 				foreach (var rt in node.Elements("RelatedTopics"))
 					RelatedTopics.Add(new BCFRelatedTopic(rt));
+			}
+
+			foreach (var labels in (node.Elements("Labels")))
+			{
+				if (Labels == null)
+					Labels = new List<string>();
+
+				Labels.Add(labels.Value);
 			}
 		}
 	}

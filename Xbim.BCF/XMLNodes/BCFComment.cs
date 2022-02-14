@@ -47,31 +47,15 @@ namespace Xbim.BCF.XMLNodes
 			}
 		}
 
-		private string _status;
-
 		/// <summary>
 		/// Status of the comment / topic (Predefined list in “extension.xsd”)
 		/// </summary>
 		[XmlElement(Order = 2)]
-		public string Status
+		public string Status { get; set; }
+
+		public bool ShouldSerializeStatus()
 		{
-			get
-			{
-				return _status;
-			}
-
-			set
-			{
-				if (value == null)
-				{
-					throw new ArgumentException(GetType().Name + " - Status shouldn't be null");
-				}
-
-				else
-				{
-					_status = value;
-				}
-			}
+			return Status != null;
 		}
 
 		private DateTime _date;

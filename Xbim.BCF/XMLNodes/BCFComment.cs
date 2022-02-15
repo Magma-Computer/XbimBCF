@@ -144,25 +144,11 @@ namespace Xbim.BCF.XMLNodes
 		/// Back reference to the topic 
 		/// </summary>
 		[XmlElement(Order = 6)]
-		public AttrIDNode Topic
+		public AttrIDNode Topic { get; set; }
+
+		public bool ShouldSerializeTopic()
 		{
-			get
-			{
-				return _topic;
-			}
-
-			set
-			{
-				if (value == null)
-				{
-					throw new ArgumentException(GetType().Name + " - Topic is mandatory and must contain a valid Guid value");
-				}
-
-				else
-				{
-					_topic = value;
-				}
-			}
+			return Topic != null;
 		}
 
 		/// <summary>
@@ -211,19 +197,19 @@ namespace Xbim.BCF.XMLNodes
 
 		private BCFComment() { }
 
-		public BCFComment(Guid id, Guid topicId, string status, DateTime date, string author, string comment)
+		public BCFComment(Guid id, Guid? topicGuid, string status, DateTime date, string author, string comment)
 		{
 			Status = status;
 			Date = date;
 			Author = author;
 			Comment = comment;
 			Guid = id;
-			Topic = new AttrIDNode(topicId);
+			Topic = topicGuid != null ? new AttrIDNode((Guid)topicGuid) : null;
 		}
 
-		public BCFComment(XElement node, Guid topicGuid)
+		public BCFComment(XElement node, Guid? topicGuid)
 		{
-			Guid = (System.Guid?)node.Attribute("Guid") ?? Guid.Empty;
+			Guid = (Guid?)node.Attribute("Guid") ?? Guid.Empty;
 			Status = (string)node.Element("Status") ?? "";
 			Date = (DateTime?)node.Element("Date") ?? DateTime.MinValue;
 			Author = (string)node.Element("Author") ?? "";
@@ -231,7 +217,7 @@ namespace Xbim.BCF.XMLNodes
 			ModifiedDate = (DateTime?)node.Element("ModifiedDate") ?? null;
 			ModifiedAuthor = (string)node.Element("ModifiedAuthor") ?? "";
 			VerbalStatus = (string)node.Element("VerbalStatus") ?? "";
-			Topic = new AttrIDNode(topicGuid);
+			Topic = topicGuid != null ? new AttrIDNode((Guid)topicGuid) : null;
 
 			var reply = node.Elements("ReplyToComment").FirstOrDefault();
 			if (reply != null)
